@@ -1,0 +1,133 @@
+{{extends file="../inc/layout.html"}}
+{{block name=body}}
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-aqua"><i class="fa fa-users"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">用户</span>
+                    <span class="info-box-text">今日新增：<small>{{$today_register_user}}</small></span>
+                    <span class="info-box-text">本月新增：<small>{{$month_register_user}}</small></span>
+                    <span class="info-box-text">总用户量：<small>{{$total_register_user}}</small></span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-red"><i class="fa fa-jpy"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">充值</span>
+                    <span class="info-box-text">今日充值：<small>{{$today_recharge}}元</small></span>
+                    <span class="info-box-text">本月充值：<small>{{$month_recharge}}元</small></span>
+                    <span class="info-box-text">总充值量：<small>{{$total_recharge}}元</small></span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+
+        <!-- fix for small devices only -->
+        <div class="clearfix visible-sm-block"></div>
+
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">消费</span>
+                    <span class="info-box-text">今日消费：<small>{{$today_consume}}读书币</small></span>
+                    <span class="info-box-text">本月消费：<small>{{$month_consume}}读书币</small></span>
+                    <span class="info-box-text">总消费量：<small>{{$total_consume}}读书币</small></span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12" id="main" style="height:600px;">
+
+        </div>
+    </div>
+
+</section>
+<!-- /.content -->
+{{/block}}
+
+{{block name=script}}
+<script src="{{CDN}}/xiaoshuo/static/js/echarts.common.min.js"></script>
+
+<script>
+    var chart = {{$chart}};
+    var app = echarts.init(document.getElementById('main'));
+    app.title = '综合统计';
+    option = {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross',
+                crossStyle: {
+                    color: '#999'
+                }
+            }
+        },
+        toolbox: {
+            feature: {
+                dataView: {show: true, readOnly: false},
+                magicType: {show: true, type: ['line', 'bar']},
+                restore: {show: true},
+                saveAsImage: {show: true}
+            }
+        },
+        legend: {
+            data:['引入用户量','关注量','取关量','付费用户量','充值金额']
+        },
+        xAxis: [
+            {
+                type: 'category',
+                data: chart.day_list,
+                axisPointer: {
+                    type: 'shadow'
+                }
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value',
+                name: '数量',
+                min: 0,
+                max: 8000,
+                interval: 500
+            }
+        ],
+        series: [
+            {
+                name:'引入用户量',
+                type:'bar',
+                data:chart.come_num
+            },
+            {
+                name:'关注量',
+                type:'bar',
+                data:chart.follow_num
+            },
+            {
+                name:'付费用户量',
+                type:'bar',
+                data:chart.pay_num
+            }
+        ]
+    };
+    app.setOption(option);
+</script>
+{{/block}}
