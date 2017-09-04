@@ -82,12 +82,12 @@ class Db {
         return self::db()->find($this->table, ['id' => $id]);
     }
 
-    public function find($data = []){
-        return self::db()->find($this->table, $data);
+    public function find($where = []) {
+        return self::db()->find($this->table, $where);
     }
 
-    public function getList($data = [], $cols='*'){
-        return self::db()->select($this->table, array_filter($data), $cols);
+    public function getList($where = [], $cols = '*') {
+        return self::db()->select($this->table, array_filter($where), $cols);
     }
 
     public function dataTable($param = [], $order = [], $cols = '*') {
