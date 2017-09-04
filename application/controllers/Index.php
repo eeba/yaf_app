@@ -6,18 +6,10 @@ class Controller_Index extends Common\AppAbstract{
     }
 
     public function action() {
-//        $ret = \Base\Config::get('service.database.master.dsn');
-//        var_dump($ret);
-//
-//
-//        $data = array(
-//            'name' => 'admin',
-//            'password' => '123456',
-//            'passwordsdf' => '123456',
-//        );
-//        $people = array('fname' => 'John', 'lname' => 'Doe', 'email' => 'j.doe@example.com');
-//        $this->response['data'] = $people;
-//        $this->response['time'] = date('Y-m-d H:i:s');
-//        $this->response['date'] = time();
+        $list = new Base\Node(ROOT_PATH . '/application/controllers/Api',['Controller_Api_Abstract']);
+        foreach ($list->nodeList() as $key =>$value){
+            echo $value['name'];
+            echo strtolower(str_replace('_','/',$key)) . PHP_EOL;
+        }
     }
 }

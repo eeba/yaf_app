@@ -4,7 +4,7 @@ namespace Dao\Db;
 use Http\Request;
 
 class Db {
-    protected static $db = '';
+    private static $db = '';
     protected $table = '';
     protected $field = [];
 

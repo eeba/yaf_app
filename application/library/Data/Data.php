@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: mfhj-dz-001-279
- * Date: 2017/7/3
- * Time: 下午6:44
- */
 
 namespace Data;
 

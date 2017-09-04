@@ -9,7 +9,9 @@ class Bootstrap extends Yaf\Bootstrap_Abstract{
      * 在此处注册非YAF的autoload
      */
     public function _initBaseLoader() {
-        \Yaf\Loader::import(ROOT_PATH . '/vendor/autoload.php');
+        //引入三方类库
+        \Yaf\Loader::import(LIB . '/vendor/autoload.php');
+        //注册自动加载类
         spl_autoload_register(array('Base\Loader', 'autoLoader'));
     }
 
