@@ -41,17 +41,6 @@ class Db {
         return $data;
     }
 
-    public function filter_filed($data) {
-        if ($data && $this->field) {
-            foreach ($data as $key => $value) {
-                if (!in_array($key, $this->field)) {
-                    unset($data[$key]);
-                }
-            }
-        }
-        return $data;
-    }
-
     public function begin() {
         self::db()->begin();
     }
@@ -71,75 +60,41 @@ class Db {
      * @return bool|int|null
      */
     public function add($data) {
-        return self::db()->insert($this->table, $this->filter_filed($data));
+        return self::db()->insert($this->table, $data);
     }
 
-    public function update($data, $where) {
-        return self::db()->update($this->table, $this->filter_filed($data), $this->filter_filed($where));
+    public function update(array $data = array(), array $where = array(), array $order = array(), $limit = 0) {
+        return self::db()->update($this->table, $data, $where, $order, $limit);
     }
 
-    public function findById($id) {
-        return self::db()->find($this->table, ['id' => $id]);
+    public function findById($id, $cols = '*', array $order = array()) {
+        return self::db()->find($this->table, ['id' => $id], $cols, $order);
     }
 
-    public function find($where = []) {
-        return self::db()->find($this->table, $where);
+    public function find($where = [], $cols = '*', array $order = array()) {
+        return self::db()->find($this->table, $where, $cols, $order);
     }
 
-    public function getList($where = [], $cols = '*') {
-        return self::db()->select($this->table, array_filter($where), $cols);
+    public function getList(array $where = array(), $cols = '*', array $order = array(), $limit = 0) {
+        return self::db()->select($this->table, array_filter($where), $cols, $order, $limit);
     }
 
-    public function dataTable($param = [], $order = [], $cols = '*') {
-        $param = array_filter($param);
+    public function dataTable(array $where = [], $cols = '*', array $order = []) {
         $sql = "select {$cols} from {$this->table} where ";
         $count_sql = "select count(1) num from {$this->table} where ";
-        $where = $params = [];
-        $where[] = 1;
-        foreach ($param as $key => $value) {
-            if (is_array($value)) {
-                if (isset($value['start']) || isset($value['end'])) {
-                    if ($value['start']) {
-                        $where[] = "{$key} >= {$value['start']}";
-                        $params[] = $key;
-                        $params[] = $value['start'];
-                    }
-                    if ($value['end']) {
-                        $where[] = "{$key} <= {$value['end']}";
-                        $params[] = $key;
-                        $params[] = $value['end'];
-                    }
-                } elseif (isset($value['like'])) {
-                    $where[] = "{$key} like '%{$value['like']}%'";
-                } elseif (isset($value['neq'])) {
-                    $where[] = "{$key} != '{$value['neq']}'";
-                } else {
-                    $where[] = "{$key} in (" . implode(',', $value) . ")";
-                    $params = array_merge($params, $value);
-                }
-            } else {
-                $where[] = "{$key} = {$value}";
-                $params[] = $value;
-            }
-        }
-        $sql .= implode(' and ', $where);
-        $count_sql .= implode(' and ', $where);
-        $count = self::db()->query($count_sql, $params);
-        $count = $count[0]['num'];
-
-        if (!empty($order)) {
-            $order_sql = [];
-            foreach ($order as $key => $value) {
-                $order_sql[] = " {$key} {$value}";
-            }
-            $sql .= " order by " . implode(',', $order_sql);
-        }
 
         $start = Request::request('start', 0);
         $length = Request::request('length', 10);
-        $sql .= " limit {$start},{$length}";
+        $sql_arr = self::db()->toSql($where, $order, [$start, $length]);
+        $content_sql_arr = self::db()->toSql($where, $order);
 
-        $data['data'] = self::db()->query($sql, $params);
+        $sql .= $sql_arr['sql'];
+        $count_sql .= $content_sql_arr['sql'];
+
+        $count = self::db()->query($count_sql, $content_sql_arr['params']);
+        $count = $count[0]['num'];
+
+        $data['data'] = self::db()->query($sql, $sql_arr['params']);
         $data['draw'] = Request::request('draw');
         $data['iTotalRecords'] = $count;
         $data['iTotalDisplayRecords'] = $count;

@@ -1,12 +1,13 @@
 <?php
 return array(
+    //本地存储
     'local' => array(
-        'bucket' => ROOT_PATH . '/public/static/book_img',
+        'bucket' => ROOT_PATH . '/public/data',
     ),
-
+    //七牛cdn
     'cdn' => array(
-        'access' => 'yFj4I10oyyEuT5zoQONCpUvdldf5g8ZX7T8k2iLf',
-        'secret' => 'CzlbMhiN1mshHdliLDz7OJsLeBfaGTZjnEweSkCL',
-        'bucket' => 'cdn-linexuc'
+        'access' => '',
+        'secret' => '',
+        'bucket' => ''
     )
 );

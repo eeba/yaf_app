@@ -8,12 +8,21 @@ abstract class Controller_Api_Abstract extends Common\ApiAbstract {
     public $app_key;
     public $app_id;
 
+    public function before() {
+        echo Base\Env::$controller;
+        //访问频率限制
+        $ret = (new Security\Freq())->add('access_times', Base\Env::$controller, 5, 5);
+        if (!$ret) {
+            throw new Exception('The frequency of access is too fast', 9999999);
+        }
+    }
+
     /**
      * 接口权限验证
      *
      * @throws Exception
      */
-    public function auth() {
+    public function _auth() {
         //验签参数判断
         if (!Request::get("app_key") || !Request::get('m') || !Request::get('t')) {
             throw new Exception("msg.system.illegal_request");

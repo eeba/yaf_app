@@ -1,6 +1,6 @@
 <?php
 
-class Controller_Login extends Common\Controller{
+class Controller_Login extends Common\AdminAbstract {
     protected $route = 'simple';
     public function indexAction(){
         

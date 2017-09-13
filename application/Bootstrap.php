@@ -2,7 +2,7 @@
 class Bootstrap extends Yaf\Bootstrap_Abstract{
 
     public function _initPlugin(\Yaf\Dispatcher $dispatcher) {
-
+        $dispatcher->registerPlugin(new Plugin_Session());
     }
 
     /**
@@ -23,14 +23,4 @@ class Bootstrap extends Yaf\Bootstrap_Abstract{
         \Base\Env::init($dispatcher->getRequest());
     }
 
-    /**
-     * 开启debug
-     */
-    public function _initBaseDebug(){
-        if (DEBUG || (\Base\Env::getEnvName() === APP_ENVIRON_DEV || \Base\Env::getEnvName() === APP_ENVIRON_TEST)) {
-//            ini_set('display_errors', true);
-//            ini_set('xdebug.var_display_max_depth', 10);
-//            error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
-        }
-    }
 }
