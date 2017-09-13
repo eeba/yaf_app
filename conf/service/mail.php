@@ -3,7 +3,7 @@ return [
     'system' => [
         "host" => 'smtp.163.com',
         "port" => '25',
-        "user" => '3151989@163.com',
+        "user" => 'tofeesn@163.com',
         "password" =>  '',
         "nickname" => 'hi',
     ],
