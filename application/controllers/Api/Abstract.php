@@ -9,12 +9,19 @@ abstract class Controller_Api_Abstract extends Common\ApiAbstract {
     public $app_id;
 
     public function before() {
-        echo Base\Env::$controller;
-        //访问频率限制
-        $ret = (new Security\Freq())->add('access_times', Base\Env::$controller, 5, 5);
+        //访问频率限制. 同一接口，同一ip 每分钟最多100次
+        $key = Base\Env::$controller . '_' . ip2long(Util\Ip::getClientIp());
+        $ret = (new Security\Freq())->add('ACCESS_TIMES', $key, 100, 60);
         if (!$ret) {
             throw new Exception('The frequency of access is too fast', 9999999);
         }
+
+        //客户端限制
+        //$ua = strtolower($_SERVER['HTTP_USER_AGENT']);
+        //$isWeiXin = strpos($ua, 'micromessenger') === false ? false : true;
+        //$isAndroid = strpos($ua, 'android') === false ? false : true;
+        //$isIos = strpos($ua, 'iphone') === false ? false : true;
+
     }
 
     /**

@@ -1,4 +1,8 @@
 <?php
+ini_set('display_errors', true);
+error_reporting(E_ALL);
+
+define('APP_START_TIME', microtime(1));
 header("Content-type:text/html; charset=utf-8");
 header('Pragma: no-cache', false);
 
