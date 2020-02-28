@@ -8,6 +8,6 @@ namespace Job\Tmp;
 class Tmp{
 
     public function action(){
-        \Msg\Msg::getInstance()->send('wenlong.yang@beebank.com', '测试', '<h1>这是一封测试邮件</h1>');
+        \Msg\Msg::getInstance()->send('xxx@xxx.com', '测试', '<h1>这是一封测试邮件</h1>');
     }
 }
